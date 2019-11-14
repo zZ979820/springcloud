@@ -24,5 +24,10 @@ public class queryUserController {
         System.out.println();
         System.out.println();
     }
-
+    public void f2(){
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+    }
 }
