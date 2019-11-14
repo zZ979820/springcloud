@@ -18,16 +18,5 @@ public class queryUserController {
         List<User> user = um.queryUserList();
         return user;
     }
-    public void f1(){
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-    }
-    public void f2(){
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-    }
+    
 }
