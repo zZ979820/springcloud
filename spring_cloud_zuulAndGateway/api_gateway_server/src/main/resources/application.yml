@@ -3,47 +3,54 @@ server:
 spring:
   application:
     name: api-gateway-server #服务名称
-  redis:
-    host: localhost
-    pool: 6379
-    database: 0
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    database: 0
+#    timeout: 5
   cloud: #配置SpringCloudGateway的路由
     gateway:
       routes:
+      - id: product-service
+        uri: lb://service-product
+        predicates:
+        - Path=/product-service/**
+        filters:
+        - RewritePath=/product-service/(?<segment>.*), /$\{segment}
+#        - name: RequestRateLimiter
+#          args:
+#            #使用spel从容器中获取对象
+#            key-resolver: '#{@userKeyResolver}'
+#            #令牌桶每秒填充平均速率
+#            redis-rate-limiter.replenishRate: 1
+#            #令牌桶上限
+#            redis-rate-limiter.burstCapacity: 3
       - id: order-service
         uri: lb://service-order
         predicates:
         - Path=/order-service/**
         filters:
         - RewritePath=/order-service/(?<segment>.*), /$\{segment}
-      - id: product-service
-        uri: lb://service-product
-        predicates:
-        - Path=/product-service/**
-        filters:
 #        - name: RequestRateLimiter
 #          args:
-#            # 使用SpEL从容器中获取对象
+#            #使用spel从容器中获取对象
 #            key-resolver: '#{@userKeyResolver}'
-#            # 令牌桶每秒填充平均速率
+#            #令牌桶每秒填充平均速率
 #            redis-rate-limiter.replenishRate: 1
-#            # 令牌桶的上限
+#            #令牌桶上限
 #            redis-rate-limiter.burstCapacity: 3
-        - RewritePath=/product-service/(?<segment>.*), /$\{segment}
-
-  # RequestRateLimiter : 使用限流过滤器,是springcloud gateway提供的
-  # 参数  replenishRate : 向令牌桶中填充的速率
-  #     burstCapacity :令牌桶的容量
-
-  #修改zipkin使用rabbitmq采集数据
+      discovery:
+        locator:
+          lower-case-service-id: true #服务名称以小写呈现
+          enabled: true #开启根据服务名称自动转发
   zipkin:
-    #base-url: http://127.0.0.1:9411/  #server的请求地址
+    #base-url: http://127.0.0.1:9411/ #zipkin server的请求地址
     sender:
-      #type: web #数据的传输方式 , 已http的形式向server端发送数据
-      type: rabbit #向rabbitmq中发送消息
+      type: rabbit
+    # type: web #请求方式，默认以http的方式向zipkin server发送追踪数据
   sleuth:
     sampler:
-      probability: 1 #采样比
+      probability: 1.0 #采样的百分比
   rabbitmq:
     host: localhost
     port: 5672
@@ -63,6 +70,9 @@ eureka:
       defaultZone: http://localhost:9000/eureka/
   instance:
     prefer-ip-address: true #使用ip地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} #向注册中心中注册服务id
+    lease-renewal-interval-in-seconds: 5 #向注册中心中注册服务id
+    lease-expiration-duration-in-seconds: 10 #续约到期的时间
 logging:
   level:
     root: info

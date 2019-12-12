@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.itcast</groupId>
-    <artifactId>spring_cloud_demo</artifactId>
+    <artifactId>spring_cloud_zuulAndGateway</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
@@ -14,6 +14,8 @@
         <module>eureka_server</module>
         <module>api_zuul_server</module>
         <module>api_gateway_server</module>
+        <module>stream_producer</module>
+        <module>stream_consumer</module>
     </modules>
 
     <parent>

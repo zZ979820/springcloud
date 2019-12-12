@@ -28,6 +28,7 @@ public class OrderController {
 
 	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
 	public String findOrderById(@PathVariable Long id) {
+
 		return "调用订单系统查询订单";
 	}
 }

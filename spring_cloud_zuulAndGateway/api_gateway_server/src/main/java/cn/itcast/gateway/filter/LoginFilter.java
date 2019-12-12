@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
  * 自定义一个全局过滤器
  *      实现 globalfilter , ordered接口
  */
-//@Component
 public class LoginFilter implements GlobalFilter,Ordered {
 
 	/**
